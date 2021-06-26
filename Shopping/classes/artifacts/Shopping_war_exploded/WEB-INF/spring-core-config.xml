@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+
+    <!-- 扫描 -->
+    <context:component-scan base-package="com.sybinal.shop"/>
+
+
+    <!-- 属性文件 -->
+    <context:property-placeholder location="classpath:jdbc.properties,classpath:config.properties"/>
+
+    <!-- 连接池 -->
+    <bean id="realDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url"
+                  value="jdbc:mysql://localhost:3306/shopping?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone=UTC"/>
+        <property name="username" value="root"/>
+        <property name="password" value="112800"/>
+        <property name="defaultAutoCommit" value="false"/>
+        <property name="maxActive" value="96"/>
+        <property name="maxIdle" value="16"/>
+        <property name="minIdle" value="0"/>
+        <property name="maxWait" value="60000"/>
+    </bean>
+
+    <!-- sql日志用 -->
+    <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+        <constructor-arg index="0" ref="realDataSource"/>
+    </bean>
+
+    <!-- 综合分页使用的sqlSession -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+        <constructor-arg index="1" value="SIMPLE"/>
+    </bean>
+
+    <!-- 事务管理器 -->
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="globalRollbackOnParticipationFailure" value="false"/>
+    </bean>
+
+    <!-- SqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+
+    <!-- 扫描 Mappers -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.sybinal.shop.mapper"/>
+    </bean>
+
+    <!-- 事务处理用 -->
+    <tx:annotation-driven/>
+
+    <!-- API -->
+
+    <!-- 定义连接管理器 -->
+    <bean id="httpClientConnectionManager"
+          class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager"
+          destroy-method="close">
+        <!-- 最大连接数 -->
+        <property name="maxTotal" value="${http.maxTotal}"/>
+        <!-- 设置每个主机地址的并发数 -->
+        <property name="defaultMaxPerRoute" value="${http.defaultMaxPerRoute}"/>
+    </bean>
+
+    <!-- httpclient对象构建器 -->
+    <bean id="httpClientBuilder" class="org.apache.http.impl.client.HttpClientBuilder">
+        <!-- 设置连接管理器 -->
+        <property name="connectionManager" ref="httpClientConnectionManager"/>
+    </bean>
+
+    <!-- 定义Httpclient对象 -->
+    <bean id="httpClient" class="org.apache.http.impl.client.CloseableHttpClient"
+          factory-bean="httpClientBuilder" factory-method="build" scope="prototype">
+    </bean>
+
+    <bean id="requestConfigBuilder" class="org.apache.http.client.config.RequestConfig.Builder">
+        <!-- 创建连接的最长时间 -->
+        <property name="connectTimeout" value="${http.connectTimeout}"/>
+        <!-- 从连接池中获取到连接的最长时间 -->
+        <property name="connectionRequestTimeout" value="${http.connectionRequestTimeout}"/>
+        <!-- 数据传输的最长时间 -->
+        <property name="socketTimeout" value="${http.socketTimeout}"/>
+        <!-- 提交请求前测试连接是否可用 -->
+        <property name="staleConnectionCheckEnabled" value="${http.staleConnectionCheckEnabled}"/>
+    </bean>
+
+    <!-- 定义请求参数 -->
+    <bean id="requestConfig" class="org.apache.http.client.config.RequestConfig"
+          factory-bean="requestConfigBuilder" factory-method="build">
+    </bean>
+    <!-- Message -->
+    <bean id="messageSource"
+          class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>i18n/application-messages</value>
+            </list>
+        </property>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+</beans>

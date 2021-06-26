@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+<classPathEntry location="C:\TOSS_J\toss_java\Source\WEB-INF\lib\mysql-connector-java-5.1.16-bin.jar"/>
+<!-- <classPathEntry location="/Users/erase_leo/Documents/workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/shop/WEB-INF/lib/mysql-connector-java-5.1.18.jar"/> -->
+  <context id="context1" >
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/shopping?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false&amp;serverTimezone=UTC" userId="root" password="112800" />
+    <javaModelGenerator targetPackage="com.sybinal.shop.model" targetProject="shop" />
+    <sqlMapGenerator targetPackage="com.sybinal.shop.mapper" targetProject="shop" />
+    <javaClientGenerator targetPackage="com.sybinal.shop.mapper" targetProject="shop" type="XMLMAPPER" />
+	<table tableName="article"/>			<!-- 1.文章  -->
+	<table tableName="article_category"/>	<!-- 2.文章类别  -->
+	<table tableName="user_roles"/>			<!-- 3.用户角色  -->
+	<table tableName="user"/>				<!-- 4.用户信息  -->
+	<table tableName="contect"/>			<!-- 5.联系人表  -->
+	<table tableName="product_category"/>	<!-- 6.商品类别  -->
+	<table tableName="product"/>			<!-- 7.商品  -->
+	<table tableName="product_image"/>		<!-- 8.商品图片  -->
+	<table tableName="option"/>				<!-- 9.Option  -->
+	<table tableName="option_value"/>		<!-- 10.Option value  -->
+	<table tableName="product_option"/>		<!-- 11.商品Option  -->
+	<table tableName="order_info"/>			<!-- 12.订单  -->
+	<table tableName="order_history"/>		<!-- 13.订单历史表  -->
+	<table tableName="order_item"/>			<!-- 14.订单明细  -->
+	<table tableName="order_option"/>		<!-- 15.订单明细子表  -->
+	<table tableName="payment_history"/>	<!-- 16.支付表  -->
+	<table tableName="wishlist"/>			<!-- 17.收藏表  -->
+	<table tableName="sequence"/>			<!-- 18.采番表  -->
+	<table tableName="comments"/>			<!-- 19.评论表  -->
+	<table tableName="logistics"/>			<!-- 20.配送单表  -->
+	<table tableName="ewallet"/>			<!-- 21.电子钱包表  -->
+	<table tableName="account"/>			<!-- 22.用户电子钱包账户表  -->
+   </context>
+</generatorConfiguration>

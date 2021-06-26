@@ -1,0 +1,89 @@
+<!DOCTYPE logback>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                <![CDATA[%d{yyyy-MM-dd HH:mm:ss}\tIP:%X{req.remoteHost}\tthread:%thread\tUSER:%X{USER}\tmessage:%replace(%msg){'\n', ''}%n]]></pattern>
+        </encoder>
+    </appender>
+
+    <appender name="APPLICATION_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/projectName-application.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/projectName-application-%d{yyyyMMdd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>
+                <![CDATA[%d{yyyy-MM-dd HH:mm:ss}\tIP:%X{req.remoteHost}\tthread:%thread\tUSER:%X{USER}\tmessage:%replace(%msg){'\n', ''}%n]]></pattern>
+        </encoder>
+    </appender>
+
+    <appender name="MONITORING_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/projectName-monitoring.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/projectName-monitoring-%d{yyyyMMdd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>
+                <![CDATA[%d{yyyy-MM-dd HH:mm:ss}\tIP:%X{req.remoteHost}\tthread:%thread\tUSER:%X{USER}\t%msg%n]]></pattern>
+        </encoder>
+    </appender>
+
+    <appender name="DB_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/projectName-db.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/projectName-db-%d{yyyyMMdd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>
+                <![CDATA[%d{yyyy-MM-dd HH:mm:ss}\tIP:%X{req.remoteHost}\tthread:%thread\tUSER:%X{USER}\t%msg%n]]></pattern>
+        </encoder>
+    </appender>
+
+    <!-- Application Loggers -->
+    <logger name="com.sybinal">
+        <level value="info"/>
+    </logger>
+
+    <logger name="jdbc.sqltiming">
+        <level value="warn"/>
+    </logger>
+
+    <!-- (2) -->
+    <logger name="jdbc.sqlonly">
+        <level value="info"/>
+    </logger>
+
+    <!-- (3) -->
+    <logger name="jdbc.audit">
+        <level value="warn"/>
+    </logger>
+
+    <!-- (4) -->
+    <logger name="jdbc.connection">
+        <level value="warn"/>
+    </logger>
+
+    <!-- (5) -->
+    <logger name="jdbc.resultset">
+        <level value="warn"/>
+    </logger>
+
+    <!-- (6) -->
+    <logger name="jdbc.resultsettable">
+        <level value="warn"/>
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="APPLICATION_LOG_FILE"/>
+    </root>
+
+</configuration>

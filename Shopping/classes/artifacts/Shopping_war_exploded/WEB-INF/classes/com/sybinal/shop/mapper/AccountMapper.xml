@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sybinal.shop.mapper.AccountMapper">
+
+	<insert id="saveAccount" parameterType="com.sybinal.shop.model.Account">
+		insert into `account` (username,amount,source,updtime) values (#{username,jdbcType=VARCHAR},#{amount,jdbcType=DOUBLE},#{source,jdbcType=VARCHAR},#{updTime,jdbcType=VARCHAR});
+	</insert>
+	
+	<select id="getAccountByUser" parameterType="int" resultType="com.sybinal.shop.model.Account">
+		select sum(account.amount) amount from `account` ,`user` u where  account.username = u.user_name  and u.id = #{userId,jdbcType=INTEGER}
+	</select>
+
+	<insert id="rechargeAccount" parameterType="com.sybinal.shop.model.Account">
+		insert into `account` (username,amount,source,updtime) values (#{username,jdbcType=VARCHAR},#{amount,jdbcType=DOUBLE},#{source,jdbcType=VARCHAR},#{updTime,jdbcType=VARCHAR});
+	</insert>
+	
+	<insert id="payOrderByEwallet" parameterType="com.sybinal.shop.model.Account">
+		insert into `account` (username,amount,source,updtime) values (#{username,jdbcType=VARCHAR},#{amount,jdbcType=DOUBLE},#{source,jdbcType=VARCHAR},#{updTime,jdbcType=VARCHAR});
+	</insert>
+</mapper>
